@@ -8,4 +8,10 @@ router.get('/contacts', contactController.showContacts)
 // Ruta POST para guardar un nuevo contacto
 router.post('/contacts', contactController.createContact)
 
+
+router.get('/', (req, res) => {
+  res.redirect('/contacts')
+})
+
+
 module.exports = router
