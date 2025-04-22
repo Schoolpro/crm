@@ -2,7 +2,11 @@ const contactModel = require('../models/contact-model')
 
 async function showContacts(req, res) {
   const contacts = await contactModel.getAllContacts()
-  res.render('contacts', { contacts })
+  res.render('contacts', {
+    contacts,
+    user: req.session.user // Para que se muestre el nombre y email arriba si querés
+  });
+  
 }
 
 async function createContact(req, res) {

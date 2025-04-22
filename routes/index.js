@@ -1,26 +1,30 @@
 const express = require('express')
 const router = express.Router()
+
 const contactController = require('../controllers/contactController')
+const { requireLogin } = require('../middlewares/authMiddleware')
 
-
-// Ruta principal del sitio ("/")
-// Cuando el usuario entra a la página raíz, se le muestra la vista "index.ejs"
-// Esta vista sirve como home o dashboard inicial del CRM
+// ✅ Ruta raíz "/"
+// Si hay sesión, renderiza index.ejs (dashboard)
+// Si NO hay sesión, renderiza landing.ejs (inicio público)
 router.get('/', (req, res) => {
-  res.render('index')
-})
+  console.log('💾 sesión actual:', req.session.user); // 👈 Agregado
+
+  if (req.session.user) {
+    return res.render('index', {
+      user: req.session.user
+    });
+  }
+
+  res.render('landing', {
+    error: null,
+    user: null
+  });
+});
 
 
-// Ruta GET para mostrar los contactos y el formulario
-router.get('/contacts', contactController.showContacts)
-
-// Ruta POST para guardar un nuevo contacto
-router.post('/contacts', contactController.createContact)
-
-
-router.get('/', (req, res) => {
-  res.redirect('/contacts')
-})
-
+// ✅ Contactos (ruta protegida por login)
+router.get('/contacts', requireLogin, contactController.showContacts)
+router.post('/contacts', requireLogin, contactController.createContact)
 
 module.exports = router

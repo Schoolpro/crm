@@ -1,3 +1,10 @@
+<% if (user) { %>
+  <div class="alert alert-success text-center">
+    ¡Bienvenido, <%= user.email %>! (Rol: <%= user.role %>)
+  </div>
+<% } %>
+
+
 <h1>Contactos</h1>
 
 <form method="POST" action="/contacts">

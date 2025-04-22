@@ -1,0 +1,86 @@
+<!-- /views/landing.ejs -->
+<%- include('partials/head') %>
+<% if (user) { %>
+    <div class="alert alert-success text-center">¡Sesión iniciada como <%= user.email %>!</div>
+  <% } %>
+  
+
+<div class="container py-5">
+  <div class="row align-items-center justify-content-center">
+
+    <!-- Login Form -->
+    <div class="col-lg-5 mb-5">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h4 class="card-title text-center mb-4 fw-semibold">Iniciar sesión</h4>
+
+          <% if (error) { %>
+            <div class="alert alert-danger text-center"><%= error %></div>
+          <% } %>
+
+          <p class="text-danger text-center">Estoy en landing.ejs</p>
+
+
+          <form method="POST" action="/login">
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control rounded-3" name="email" id="email" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control rounded-3" name="password" id="password" required>
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100 rounded-3">Ingresar</button>
+          </form>
+
+          <p class="text-center mt-3 mb-0 small">
+            ¿No tenés cuenta? <a href="/register">Registrate</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Cards -->
+    <div class="col-lg-7">
+      <div class="row g-4">
+        <div class="col-sm-6">
+          <div class="card border-top border-4 border-primary-subtle shadow-sm h-100 rounded-4">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold">📇 Organizá tus contactos</h5>
+              <p class="card-text text-muted small">Toda la información de tus clientes en un solo lugar.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card border-top border-4 border-warning-subtle shadow-sm h-100 rounded-4">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold">🕓 Seguimiento inteligente</h5>
+              <p class="card-text text-muted small">Llamadas, tareas y notas en orden y al instante.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card border-top border-4 border-success-subtle shadow-sm h-100 rounded-4">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold">👥 Trabajo en equipo</h5>
+              <p class="card-text text-muted small">Compartí tareas y mantené informados a todos.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card border-top border-4 border-info-subtle shadow-sm h-100 rounded-4">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold">📊 Panel claro</h5>
+              <p class="card-text text-muted small">Tus metas, tareas y seguimientos a simple vista.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,43 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+
+  <h1 class="mb-3"><%= org.name %></h1>
+  <p><strong>Teléfono:</strong> <%= org.phone %></p>
+  <p><strong>Sitio web:</strong> <a href="<%= org.website %>" target="_blank"><%= org.website %></a></p>
+  <p><strong>Perfil:</strong> <%= org.profile %></p>
+
+  <hr>
+
+  <h3>👥 Contactos</h3>
+  <% if (contacts.length === 0) { %>
+    <p>No hay contactos asociados.</p>
+  <% } else { %>
+    <ul class="list-group mb-4">
+      <% contacts.forEach(contact => { %>
+        <li class="list-group-item">
+          <strong><%= contact.first_name %> <%= contact.last_name %></strong><br>
+          <%= contact.title %> | <%= contact.phone %> | <%= contact.email %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <h3>📓 Historial de comunicación</h3>
+  <% if (logs.length === 0) { %>
+    <p>No hay logs registrados.</p>
+  <% } else { %>
+    <ul class="list-group">
+      <% logs.forEach(log => { %>
+        <li class="list-group-item">
+          <small class="text-muted"><%= log.created_at.toLocaleString() %> por <%= log.user_name %></small><br>
+          <%= log.message %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+</div>
+
+<%- include('partials/footer') %>

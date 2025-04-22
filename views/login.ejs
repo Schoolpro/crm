@@ -1,0 +1,24 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+  <h2 class="text-center">Iniciar Sesión</h2>
+
+  <% if (error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/login" class="mx-auto" style="max-width: 400px;">
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <input type="email" name="email" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="password">Contraseña</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>

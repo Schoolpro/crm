@@ -1,0 +1,33 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+  <h1 class="mb-4">🏢 Empresas registradas</h1>
+
+  <table class="table table-striped table-hover shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Website</th>
+        <th>Perfil</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% organizations.forEach(org => { %>
+        <tr>
+          <td><%= org.name %></td>
+          <td><%= org.phone %></td>
+          <td><a href="<%= org.website %>" target="_blank"><%= org.website %></a></td>
+          <td><%= org.profile %></td>
+          <td>
+            <a href="/organizations/<%= org.id %>" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

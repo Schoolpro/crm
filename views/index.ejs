@@ -1,9 +1,67 @@
+
 <%- include('partials/head') %>
 <%- include('partials/header') %>
 
-<div class="container text-center mt-5">
-  <h1 class="mb-4">Bienvenido a tu CRM</h1>
-  <p class="lead">Usá el menú de arriba para navegar por Contactos, Empresas, Tareas y más.</p>
+
+
+<div class="container mt-5 pb-5">
+
+  
+
+  <h1>¿Estoy viendo esta página?</h1>
+
+  <!-- 👋 BIENVENIDA -->
+  <div class="text-center mb-5">
+    <h1 class="display-5">Bienvenido la concha de tu hermana!</h1>
+    <p class="lead">Acá podés ver a quién contactar, tus tareas y tus metas.</p>
+  </div>
+
+  <!-- 📍 ACCIONES PRINCIPALES -->
+  <div class="row text-center mb-5">
+    <div class="col-md-4 mb-3">
+      <a href="/contacts" class="btn btn-outline-primary w-100 py-3">
+        📇 Ver Contactos
+      </a>
+    </div>
+    <div class="col-md-4 mb-3">
+      <a href="/organizations" class="btn btn-outline-success w-100 py-3">
+        🏢 Ver Organizaciones
+      </a>
+    </div>
+    <div class="col-md-4 mb-3">
+      <a href="/todo" class="btn btn-outline-warning w-100 py-3">
+        ✅ To-do List
+      </a>
+    </div>
+  </div>
+
+  <!-- 🕓 LLAMADAS / RECORDATORIOS -->
+  <div class="mb-5">
+    <h3>📞 Próximos contactos</h3>
+    <ul class="list-group">
+      <li class="list-group-item">Llamar a Juan Pérez – Empresa ACME – Hoy 15:30</li>
+      <li class="list-group-item">Seguimiento con Laura Gutiérrez – Ayer</li>
+    </ul>
+  </div>
+
+  <!-- ✅ TAREAS -->
+  <div class="mb-5">
+    <h3>📝 Tareas asignadas</h3>
+    <ul class="list-group">
+      <li class="list-group-item">Enviar cotización a Empresa XYZ</li>
+      <li class="list-group-item">Actualizar datos de Big Motors</li>
+    </ul>
+  </div>
+
+  <!-- 🎯 METAS -->
+  <div class="mb-5">
+    <h3>🎯 Metas de la semana</h3>
+    <ul class="list-group">
+      <li class="list-group-item">Contactar al menos 5 empresas nuevas</li>
+      <li class="list-group-item">Cerrar 2 tratos</li>
+    </ul>
+  </div>
+
 </div>
 
 <%- include('partials/footer') %>
