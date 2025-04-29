@@ -1,9 +1,28 @@
+/**
+ * app.js
+ * 
+ * 📌 Archivo principal de configuración de la aplicación Express.
+ * 
+ * Se encarga de:
+ * - Inicializar el servidor Express.
+ * - Configurar middleware como cookies, sesiones, logger, y Passport.
+ * - Establecer el motor de vistas (EJS).
+ * - Importar y usar las rutas principales del proyecto.
+ * - Activar la autenticación con sesiones y Passport.js.
+ * 
+ * Este archivo es el punto de entrada de toda la aplicación.
+ */
+
+
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
+const passport = require('./utils/passport'); // 📌 Este importa la configuración de Google
+
 
 const searchRoute = require('./routes/searchRoute');
 const authRoute = require('./routes/authRoute');
@@ -56,6 +75,21 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+// ✅ Configura sesiones para Passport
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'supersecret',
+  resave: false,
+  saveUninitialized: false
+}));
+
+// ✅ Inicializa Passport y mantiene sesión de usuario
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
 
 console.log('URL de base de datos:', process.env.DATABASE_URL);
 

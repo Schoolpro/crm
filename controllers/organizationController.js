@@ -10,18 +10,22 @@ async function showOrganizations(req, res) {
   }
 }
 
-async function showOrganizationDetails(req, res) {
-  const id = req.params.id;
-
+async function showOrganizationDetails(req, res, next) {
   try {
-    const org = await orgModel.getOrganizationById(id);
-    const contacts = await orgModel.getContactsByCompanyId(id);
-    const logs = await orgModel.getLogsByCompanyId(id);
+    const organizationId = req.params.id;
+    const organizationData = await orgModel.getOrganizationById(organizationId);
 
-    res.render('organization-details', { org, contacts, logs });
-  } catch (err) {
-    console.error('Error mostrando detalles de la empresa:', err);
-    res.status(500).send('Error al cargar detalles');
+    console.log('ID solicitado:', organizationId);
+    console.log('Resultado del modelo:', organizationData);
+
+    // Si no encontró la organización, pasar null
+    if (!organizationData) {
+      return res.render('organization-details', { organization: null });
+    }
+
+    res.render('organization-details', { organization: organizationData });
+  } catch (error) {
+    next(error);
   }
 }
 

@@ -46,3 +46,82 @@ h1, h2, h3 {
   color: #555;
 }
 
+/* ===== Organization Detail View (Inicio) ===== */
+.organization-details {
+  max-width: 900px;
+  margin: auto;
+  padding: 1.5rem;
+  font-family: 'Inter', 'Arial', sans-serif;
+}
+
+.organization-details h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #0d6efd;
+}
+
+.organization-details h2 {
+  margin-top: 2rem;
+  color: #0a58ca;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 5px;
+}
+
+.organization-details p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.organization-details a {
+  color: #198754;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.organization-details a:hover {
+  text-decoration: underline;
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.social-links li {
+  margin-right: 1.5rem;
+}
+
+.social-links li a {
+  font-size: 1.2rem;
+  color: #0d6efd;
+}
+
+@media (max-width: 600px) {
+  .organization-details {
+    padding: 1rem;
+  }
+
+  .organization-details h1 {
+    font-size: 1.7rem;
+  }
+
+  .organization-details h2 {
+    font-size: 1.3rem;
+  }
+
+  .organization-details p {
+    font-size: 0.95rem;
+  }
+
+  .social-links {
+    flex-direction: column;
+  }
+
+  .social-links li {
+    margin-bottom: 0.5rem;
+  }
+}
