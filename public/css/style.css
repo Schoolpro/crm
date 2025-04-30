@@ -198,3 +198,17 @@ input, button {
   background-color: #004ccc;
   border-color: #0042b3;
 }
+input, button {
+  border-radius: 6px;
+}
+
+.btn-primary {
+  background-color: #0066ff;
+  border-color: #0056e0;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #004ccc;
+  border-color: #0042b3;
+}

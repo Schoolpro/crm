@@ -1,14 +1,14 @@
 <%- include('partials/head') %>
 <%- include('partials/header') %>
 
-<div class="container mt-4">
+<div class="contacts-container">
   <% if (user) { %>
     <div class="alert alert-success text-center mb-4">
       ¡Bienvenido, <%= user.email %>! (Rol: <%= user.role %>)
     </div>
   <% } %>
 
-  <h2 class="mb-4"> Contactos</h2>
+  <h2 class="mb-4">📇 Contactos</h2>
 
   <form method="POST" action="/contacts" class="row g-3 mb-5 p-3 bg-white shadow-sm rounded">
     <div class="col-md-2">
@@ -37,34 +37,36 @@
     </div>
   </form>
 
-  <table class="table table-hover shadow-sm bg-white rounded">
-    <thead class="table-light">
-      <tr>
-        <th> Nombre</th>
-        <th> Teléfono</th>
-        <th> Email</th>
-        <th> Cargo</th>
-        <th> LinkedIn</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% contacts.forEach(c => { %>
+  <div class="table-responsive">
+    <table class="table contacts-table">
+      <thead class="table-light">
         <tr>
-          <td><%= c.first_name %> <%= c.last_name %></td>
-          <td><%= c.phone %></td>
-          <td><%= c.email %></td>
-          <td><%= c.title %></td>
-          <td>
-            <% if (c.linkedin) { %>
-              <a href="<%= c.linkedin %>" target="_blank" class="btn btn-sm btn-outline-primary">Ver Perfil</a>
-            <% } else { %>
-              <span class="text-muted">N/A</span>
-            <% } %>
-          </td>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Cargo</th>
+          <th>LinkedIn</th>
         </tr>
-      <% }) %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% contacts.forEach(c => { %>
+          <tr>
+            <td data-label="Nombre"><%= c.first_name %> <%= c.last_name %></td>
+            <td data-label="Teléfono"><%= c.phone %></td>
+            <td data-label="Email"><%= c.email %></td>
+            <td data-label="Cargo"><%= c.title %></td>
+            <td data-label="LinkedIn">
+              <% if (c.linkedin) { %>
+                <a href="<%= c.linkedin %>" target="_blank" class="btn btn-sm btn-outline-primary">Ver Perfil</a>
+              <% } else { %>
+                <span class="text-muted">N/A</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <%- include('partials/footer') %>
