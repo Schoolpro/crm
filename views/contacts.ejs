@@ -1,25 +1,70 @@
-<% if (user) { %>
-  <div class="alert alert-success text-center">
-    ¡Bienvenido, <%= user.email %>! (Rol: <%= user.role %>)
-  </div>
-<% } %>
+<%- include('partials/head') %>
+<%- include('partials/header') %>
 
+<div class="container mt-4">
+  <% if (user) { %>
+    <div class="alert alert-success text-center mb-4">
+      ¡Bienvenido, <%= user.email %>! (Rol: <%= user.role %>)
+    </div>
+  <% } %>
 
-<h1>Contactos</h1>
+  <h2 class="mb-4"> Contactos</h2>
 
-<form method="POST" action="/contacts">
-  <input type="number" name="company_id" placeholder="Company ID" required />
-  <input type="text" name="first_name" placeholder="First Name" required />
-  <input type="text" name="last_name" placeholder="Last Name" />
-  <input type="text" name="phone" placeholder="Phone" />
-  <input type="email" name="email" placeholder="Email" />
-  <input type="text" name="title" placeholder="Title (CEO...)" />
-  <input type="url" name="linkedin" placeholder="LinkedIn URL" />
-  <button type="submit">Guardar Contacto</button>
-</form>
+  <form method="POST" action="/contacts" class="row g-3 mb-5 p-3 bg-white shadow-sm rounded">
+    <div class="col-md-2">
+      <input type="number" name="company_id" class="form-control" placeholder="Company ID" required />
+    </div>
+    <div class="col-md-2">
+      <input type="text" name="first_name" class="form-control" placeholder="First Name" required />
+    </div>
+    <div class="col-md-2">
+      <input type="text" name="last_name" class="form-control" placeholder="Last Name" />
+    </div>
+    <div class="col-md-2">
+      <input type="text" name="phone" class="form-control" placeholder="Phone" />
+    </div>
+    <div class="col-md-2">
+      <input type="email" name="email" class="form-control" placeholder="Email" />
+    </div>
+    <div class="col-md-2">
+      <input type="text" name="title" class="form-control" placeholder="Title" />
+    </div>
+    <div class="col-md-6">
+      <input type="url" name="linkedin" class="form-control" placeholder="LinkedIn URL" />
+    </div>
+    <div class="col-md-12 text-end">
+      <button type="submit" class="btn btn-primary px-4">➕ Guardar Contacto</button>
+    </div>
+  </form>
 
-<ul>
-  <% contacts.forEach(c => { %>
-    <li><%= c.first_name %> <%= c.last_name %> - <%= c.email %></li>
-  <% }) %>
-</ul>
+  <table class="table table-hover shadow-sm bg-white rounded">
+    <thead class="table-light">
+      <tr>
+        <th> Nombre</th>
+        <th> Teléfono</th>
+        <th> Email</th>
+        <th> Cargo</th>
+        <th> LinkedIn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% contacts.forEach(c => { %>
+        <tr>
+          <td><%= c.first_name %> <%= c.last_name %></td>
+          <td><%= c.phone %></td>
+          <td><%= c.email %></td>
+          <td><%= c.title %></td>
+          <td>
+            <% if (c.linkedin) { %>
+              <a href="<%= c.linkedin %>" target="_blank" class="btn btn-sm btn-outline-primary">Ver Perfil</a>
+            <% } else { %>
+              <span class="text-muted">N/A</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/footer') %>

@@ -21,7 +21,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
-const passport = require('./utils/passport'); // 📌 Este importa la configuración de Google
+
 
 
 const searchRoute = require('./routes/searchRoute');
@@ -77,16 +77,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-// ✅ Configura sesiones para Passport
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'supersecret',
-  resave: false,
-  saveUninitialized: false
-}));
-
-// ✅ Inicializa Passport y mantiene sesión de usuario
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 

@@ -7,21 +7,16 @@
  * - Login tradicional con email y contraseña.
  * - Logout (cerrar sesión).
  * - Registro de nuevos usuarios (sign up).
- * - Autenticación con Google usando OAuth 2.0.
+ * 
+ * ❌ Eliminamos autenticación con Google (Passport).
  * 
  * 🔐 ¿Por qué existe este archivo?
  * Centraliza todo el manejo de usuarios que inician sesión o se registran,
- * ya sea por medio de un formulario propio o con su cuenta de Google.
+ * ya sea por medio de un formulario propio.
  * 
  * 💡 Está conectado al controlador `authController.js`, donde se encuentra la lógica
  * que procesa los formularios y maneja el acceso a la base de datos.
- * 
- * También usa Passport.js para manejar sesiones y autenticación con Google.
  */
-
-
-const passport = require('passport');
-
 
 const express = require('express');
 const router = express.Router();
@@ -50,23 +45,3 @@ router.get('/register', authController.showRegister);
 router.post('/register', authController.registerUser);
 
 module.exports = router;
-
-// ✅ Inicia el login con Google
-router.get('/auth/google', passport.authenticate('google', {
-  scope: ['profile', 'email']
-}));
-
-// ✅ Callback que recibe la respuesta de Google después del login
-router.get('/auth/google/callback', passport.authenticate('google', {
-  failureRedirect: '/login'
-}), (req, res) => {
-  // ✅ Guardamos el usuario en sesión manualmente (por si queremos usar req.session)
-  req.session.user = {
-    id: req.user.id,
-    email: req.user.email,
-    role: req.user.role,
-    company_id: req.user.company_id
-  };
-
-  res.redirect('/'); // 🔁 Redirigimos al dashboard o donde quieras
-});

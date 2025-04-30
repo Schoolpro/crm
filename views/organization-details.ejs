@@ -1,21 +1,33 @@
-<% if (!organization) { %>
-  <p class="notice">No se encontró información de esta organización.</p>
-<% } else { %>
-  <%- include('partials/head') %>
-  <%- include('partials/header') %>
- 
+<%- include('partials/head') %>
+<%- include('partials/header') %>
 
-  <section class="organization-details">
+<div class="org-layout">
+  <!-- Columna izquierda -->
+  <section class="org-left">
     <h1><%= organization.name %></h1>
     <p><strong>Phone:</strong> <%= organization.phone %></p>
     <p><strong>Website:</strong> <a href="<%= organization.website %>" target="_blank"><%= organization.website %></a></p>
-    <p><strong>Profile:</strong> <%= organization.profile %></p>
     <p><strong>Email:</strong> <%= organization.email %></p>
     <p><strong>Industry:</strong> <%= organization.industry %></p>
     <p><strong>Address:</strong> <%= organization.address %>, <%= organization.city %>, <%= organization.state %>, <%= organization.zip_code %>, <%= organization.country %></p>
 
+    <h2>Contact Information</h2>
+    <p><strong>Contact Name:</strong> <%= organization.contact_name %></p>
+    <p><strong>Contact Title:</strong> <%= organization.contact_title %></p>
+    <p><strong>Contact Phone:</strong> <%= organization.contact_phone %></p>
+    <p><strong>Contact Email:</strong> <%= organization.contact_email %></p>
+
+    <h2>Company Details</h2>
+    <p><strong>Status:</strong> <%= organization.status %></p>
+    <p><strong>Employees:</strong> <%= organization.employees %></p>
+    <p><strong>Revenue:</strong> <%= organization.revenue %></p>
+    <p><strong>Category:</strong> <%= organization.category %></p>
+    <p><strong>Source:</strong> <%= organization.source %></p>
+    <p><strong>Rating:</strong> <%= organization.rating %></p>
+    <p><strong>Priority Level:</strong> <%= organization.priority_level %></p>
+
     <h2>Social Media</h2>
-    <ul class="social-links">
+    <ul>
       <% if (organization.linkedin_url) { %>
         <li><a href="<%= organization.linkedin_url %>" target="_blank">LinkedIn</a></li>
       <% } %>
@@ -29,35 +41,15 @@
         <li><a href="<%= organization.instagram_url %>" target="_blank">Instagram</a></li>
       <% } %>
     </ul>
-
-    <h2>Contact Information</h2>
-    <p><strong>Contact Name:</strong> <%= organization.contact_name %></p>
-    <p><strong>Contact Title:</strong> <%= organization.contact_title %></p>
-    <p><strong>Contact Phone:</strong> <%= organization.contact_phone %></p>
-    <p><strong>Contact Email:</strong> <%= organization.contact_email %></p>
-
-    <h2>Company Details</h2>
-    <p><strong>Status:</strong> <%= organization.status %></p>
-    <p><strong>Notes:</strong> <%= organization.notes %></p>
-    <p><strong>Employees:</strong> <%= organization.employees %></p>
-    <p><strong>Revenue:</strong> <%= organization.revenue %></p>
-    <p><strong>Category:</strong> <%= organization.category %></p>
-    <p><strong>Source:</strong> <%= organization.source %></p>
-    <p><strong>Rating:</strong> <%= organization.rating %></p>
-    <p><strong>Priority Level:</strong> <%= organization.priority_level %></p>
-
-    <h2>Other Details</h2>
-    <p><strong>Logo URL:</strong> <a href="<%= organization.logo_url %>" target="_blank">View Logo</a></p>
-    <p><strong>Timezone:</strong> <%= organization.timezone %></p>
-    <p><strong>Tags:</strong> <%= organization.tags %></p>
-    <p><strong>Owner ID:</strong> <%= organization.owner_id %></p>
-    <p><strong>Custom Field 1:</strong> <%= organization.custom_field_1 %></p>
-    <p><strong>Custom Field 2:</strong> <%= organization.custom_field_2 %></p>
-
-    <h2>Audit</h2>
-    <p><strong>Created At:</strong> <%= organization.created_at %></p>
-    <p><strong>Updated At:</strong> <%= organization.updated_at %></p>
   </section>
 
-  <%- include('partials/footer') %>
-<% } %>
+  <!-- Panel derecho como Prompt Input -->
+  <aside class="org-profile-panel">
+    <h2>📄 Perfil de la Empresa</h2>
+    <div class="org-profile-box">
+      <p><%= organization.profile %></p>
+    </div>
+  </aside>
+</div>
+
+<%- include('partials/footer') %>
