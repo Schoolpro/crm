@@ -270,3 +270,9 @@ Este estilo requiere que cada <td> tenga un atributo `data-label="Nombre del cam
     border-bottom: none;
   }
 }
+
+.contact-subtitle {
+  font-size: 1rem;
+  color: #6c757d; /* gris Bootstrap */
+  margin-bottom: 1rem;
+}

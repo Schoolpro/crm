@@ -27,8 +27,15 @@
 
   <h2 class="mb-4"> Contactos</h2>
 
+  <!--Toggle para que aparezca y desaparezca la forma para agregar contactos-->
+
+  <div class="text-end mb-3">
+    <button id="toggleContactForm" class="btn btn-success px-4"> Add Contact</button>
+  </div>
+  
+
   <!-- Formulario para crear un nuevo contacto -->
-  <form method="POST" action="/contacts" class="row g-3 mb-5 p-3 bg-white shadow-sm rounded">
+  <form id="contactForm" method="POST" action="/contacts" class="row g-3 mb-5 p-3 bg-white shadow-sm rounded d-none">
     <div class="col-md-4">
       <select name="company_id" class="form-select" required>
         <option value="">Seleccionar Compañía</option>
@@ -67,6 +74,10 @@
     </div>
   </form>
 
+  <h3 class="contact-subtitle">Contact Directory</h3>
+
+
+
   <!-- Tabla de contactos existentes -->
   <div class="table-responsive">
     <table class="table table-hover shadow-sm bg-white rounded">
@@ -84,7 +95,14 @@
         <% contacts.forEach(c => { %>
           <tr>
             <td data-label="Nombre"><%= c.first_name %> <%= c.last_name %></td>
-            <td data-label="Compañía"><%= c.company_name || 'N/A' %></td>
+            <td data-label="Compañía">
+              <% if (c.company_id && c.company_name) { %>
+                <a href="/organizations/<%= c.company_id %>" class="text-decoration-none fw-bold"><%= c.company_name %></a>
+              <% } else { %>
+                <span class="text-muted">N/A</span>
+              <% } %>
+            </td>
+            
             <td data-label="Teléfono"><%= c.phone %></td>
             <td data-label="Email"><%= c.email %></td>
             <td data-label="Cargo"><%= c.title %></td>
@@ -102,5 +120,15 @@
     </table>
   </div>
 </div>
+
+
+<script>
+  document.getElementById('toggleContactForm').addEventListener('click', function (e) {
+    e.preventDefault();
+    const form = document.getElementById('contactForm');
+    form.classList.toggle('d-none');
+  });
+</script>
+
 
 <%- include('partials/footer') %>
