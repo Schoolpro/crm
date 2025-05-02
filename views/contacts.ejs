@@ -1,47 +1,79 @@
-<%- include('partials/head') %>
+<!-- 
+  contacts.ejs
+
+  Vista para gestionar contactos en el sistema CRM.
+  Muestra un formulario para crear nuevos contactos y una tabla con los contactos ya existentes.
+
+  Incluye:
+  - Un formulario que permite seleccionar una compañía, y cargar los datos del contacto.
+  - Una tabla donde se listan los contactos, junto con su compañía, teléfono, email, etc.
+  - Soporte responsive para que se vea bien en celulares.
+
+  Datos recibidos desde el controlador:
+  - contacts: lista de contactos (con la compañía ya asociada).
+  - companies: lista de compañías disponibles.
+  - user: información del usuario logueado (email, rol).
+-->
+
+<%- include('partials/head') %> 
 <%- include('partials/header') %>
 
-<div class="contacts-container">
+<div class="contacts-container container mt-4">
   <% if (user) { %>
     <div class="alert alert-success text-center mb-4">
       ¡Bienvenido, <%= user.email %>! (Rol: <%= user.role %>)
     </div>
   <% } %>
 
-  <h2 class="mb-4">📇 Contactos</h2>
+  <h2 class="mb-4"> Contactos</h2>
 
+  <!-- Formulario para crear un nuevo contacto -->
   <form method="POST" action="/contacts" class="row g-3 mb-5 p-3 bg-white shadow-sm rounded">
-    <div class="col-md-2">
-      <input type="number" name="company_id" class="form-control" placeholder="Company ID" required />
+    <div class="col-md-4">
+      <select name="company_id" class="form-select" required>
+        <option value="">Seleccionar Compañía</option>
+        <% companies.forEach(company => { %>
+          <option value="<%= company.id %>"><%= company.name %></option>
+        <% }) %>
+      </select>
     </div>
-    <div class="col-md-2">
+
+    <div class="col-md-4">
       <input type="text" name="first_name" class="form-control" placeholder="First Name" required />
     </div>
-    <div class="col-md-2">
+
+    <div class="col-md-4">
       <input type="text" name="last_name" class="form-control" placeholder="Last Name" />
     </div>
-    <div class="col-md-2">
+
+    <div class="col-md-4">
       <input type="text" name="phone" class="form-control" placeholder="Phone" />
     </div>
-    <div class="col-md-2">
+
+    <div class="col-md-4">
       <input type="email" name="email" class="form-control" placeholder="Email" />
     </div>
-    <div class="col-md-2">
-      <input type="text" name="title" class="form-control" placeholder="Title" />
+
+    <div class="col-md-4">
+      <input type="text" name="title" class="form-control" placeholder="Title (CEO...)" />
     </div>
+
     <div class="col-md-6">
       <input type="url" name="linkedin" class="form-control" placeholder="LinkedIn URL" />
     </div>
+
     <div class="col-md-12 text-end">
       <button type="submit" class="btn btn-primary px-4">➕ Guardar Contacto</button>
     </div>
   </form>
 
+  <!-- Tabla de contactos existentes -->
   <div class="table-responsive">
-    <table class="table contacts-table">
+    <table class="table table-hover shadow-sm bg-white rounded">
       <thead class="table-light">
         <tr>
           <th>Nombre</th>
+          <th>Compañía</th>
           <th>Teléfono</th>
           <th>Email</th>
           <th>Cargo</th>
@@ -51,11 +83,12 @@
       <tbody>
         <% contacts.forEach(c => { %>
           <tr>
-            <td data-label="Nombre"><%= c.first_name %> <%= c.last_name %></td>
-            <td data-label="Teléfono"><%= c.phone %></td>
-            <td data-label="Email"><%= c.email %></td>
-            <td data-label="Cargo"><%= c.title %></td>
-            <td data-label="LinkedIn">
+            <td><%= c.first_name %> <%= c.last_name %></td>
+            <td><%= c.company_name ? c.company_name : 'N/A' %></td>
+            <td><%= c.phone %></td>
+            <td><%= c.email %></td>
+            <td><%= c.title %></td>
+            <td>
               <% if (c.linkedin) { %>
                 <a href="<%= c.linkedin %>" target="_blank" class="btn btn-sm btn-outline-primary">Ver Perfil</a>
               <% } else { %>
