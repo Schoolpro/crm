@@ -1,71 +1,108 @@
 <%- include('partials/head') %>
 <%- include('partials/header') %>
 
-<!-- 
-  ✅ Organization Details View (Estilo Salesforce)
-
-  Muestra todos los detalles de una compañía con diseño profesional.
-  Incluye:
-  - Columna izquierda con info general, contacto, revenue, etc.
-  - Columna derecha con el perfil (descripción larga).
--->
-
 <div class="org-layout">
-  <!-- 🧩 Columna izquierda: Detalles de la empresa -->
+  <!-- 🔹 Left Column: Organization Main Info -->
   <section class="org-left">
     <h1><%= organization.name %></h1>
 
-    <p><strong>Phone:</strong> <%= organization.phone %></p>
-    <p><strong>Website:</strong>
-      <% if (organization.website) { %>
-        <a href="<%= organization.website %>" target="_blank"><%= organization.website %></a>
-      <% } else { %>
-        <span class="text-muted">N/A</span>
-      <% } %>
-    </p>
-    <p><strong>Email:</strong> <%= organization.email || 'N/A' %></p>
-    <p><strong>Industry:</strong> <%= organization.industry || 'N/A' %></p>
-    <p><strong>Address:</strong>
-      <%= organization.address %>, <%= organization.city %>, <%= organization.state %>, <%= organization.zip_code %>, <%= organization.country %>
-    </p>
+    <!-- 🟦 Basic Info -->
+    <div class="org-data-row">
+      <span class="org-label">Phone:</span>
+      <span class="org-value"><%= organization.phone || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Website:</span>
+      <span class="org-value">
+        <% if (organization.website) { %>
+          <a href="<%= organization.website %>" target="_blank"><%= organization.website %></a>
+        <% } else { %>
+          N/A
+        <% } %>
+      </span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Company Email:</span>
+      <span class="org-value"><%= organization.company_email || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Account Manager:</span>
+      <span class="org-value"><%= organization.account_manager || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Industry:</span>
+      <span class="org-value"><%= organization.industry || 'N/A' %></span>
+    </div>
 
-    <h2>Contact Information</h2>
-    <p><strong>Contact Name:</strong> <%= organization.contact_name || 'N/A' %></p>
-    <p><strong>Contact Title:</strong> <%= organization.contact_title || 'N/A' %></p>
-    <p><strong>Contact Phone:</strong> <%= organization.contact_phone || 'N/A' %></p>
-    <p><strong>Contact Email:</strong> <%= organization.contact_email || 'N/A' %></p>
+    <!-- 🟧 Revenue & Size -->
+    <h2>Revenue & Size</h2>
+    <div class="org-data-row">
+      <span class="org-label">Employees:</span>
+      <span class="org-value"><%= organization.employees || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Reported Revenue:</span>
+      <span class="org-value"><%= organization.reported_revenue || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Revenue Last Year:</span>
+      <span class="org-value"><%= organization.revenue_last_year || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Revenue This Year:</span>
+      <span class="org-value"><%= organization.revenue_this_year || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Project Size:</span>
+      <span class="org-value"><%= organization.project_size || 'N/A' %></span>
+    </div>
 
-    <h2>Company Details</h2>
-    <p><strong>Status:</strong> <%= organization.status || 'N/A' %></p>
-    <p><strong>Employees:</strong> <%= organization.employees || 'N/A' %></p>
-    <p><strong>Revenue:</strong> <%= organization.revenue || 'N/A' %></p>
-    <p><strong>Category:</strong> <%= organization.category || 'N/A' %></p>
-    <p><strong>Source:</strong> <%= organization.source || 'N/A' %></p>
-    <p><strong>Rating:</strong> <%= organization.rating || 'N/A' %></p>
-    <p><strong>Priority Level:</strong> <%= organization.priority_level || 'N/A' %></p>
+    <!-- 🟩 Location -->
+    <h2>Location</h2>
+    <div class="org-data-row">
+      <span class="org-label">Billing City:</span>
+      <span class="org-value"><%= organization.billing_city || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Billing State:</span>
+      <span class="org-value"><%= organization.billing_state_province || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Billing Country:</span>
+      <span class="org-value"><%= organization.billing_country || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Shipping City:</span>
+      <span class="org-value"><%= organization.shipping_city || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Shipping State:</span>
+      <span class="org-value"><%= organization.shipping_state_province || 'N/A' %></span>
+    </div>
+    <div class="org-data-row">
+      <span class="org-label">Shipping Country:</span>
+      <span class="org-value"><%= organization.shipping_country || 'N/A' %></span>
+    </div>
 
-    <h2>Social Media</h2>
-    <ul>
-      <% if (organization.linkedin_url) { %>
-        <li><a href="<%= organization.linkedin_url %>" target="_blank">LinkedIn</a></li>
-      <% } %>
-      <% if (organization.facebook_url) { %>
-        <li><a href="<%= organization.facebook_url %>" target="_blank">Facebook</a></li>
-      <% } %>
-      <% if (organization.twitter_url) { %>
-        <li><a href="<%= organization.twitter_url %>" target="_blank">Twitter/X</a></li>
-      <% } %>
-      <% if (organization.instagram_url) { %>
-        <li><a href="<%= organization.instagram_url %>" target="_blank">Instagram</a></li>
-      <% } %>
-    </ul>
+    <!-- 🟨 Social Media -->
+    <h2>Online Presence</h2>
+    <div class="org-data-row">
+      <span class="org-label">LinkedIn:</span>
+      <span class="org-value">
+        <% if (organization.company_linkedin) { %>
+          <a href="<%= organization.company_linkedin %>" target="_blank">View</a>
+        <% } else { %>
+          N/A
+        <% } %>
+      </span>
+    </div>
   </section>
 
-  <!-- 📄 Columna derecha: Perfil descriptivo de la empresa -->
+  <!-- 🔸 Right Column: Profile Text -->
   <aside class="org-profile-panel">
-    <h2>📄 Perfil de la Empresa</h2>
+    <h2>📄 Company Profile</h2>
     <div class="org-profile-box">
-      <p><%= organization.profile || 'Sin descripción disponible.' %></p>
+      <p><%= organization.profile || 'No profile available.' %></p>
     </div>
   </aside>
 </div>
