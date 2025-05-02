@@ -83,18 +83,19 @@
       <tbody>
         <% contacts.forEach(c => { %>
           <tr>
-            <td><%= c.first_name %> <%= c.last_name %></td>
-            <td><%= c.company_name ? c.company_name : 'N/A' %></td>
-            <td><%= c.phone %></td>
-            <td><%= c.email %></td>
-            <td><%= c.title %></td>
-            <td>
+            <td data-label="Nombre"><%= c.first_name %> <%= c.last_name %></td>
+            <td data-label="Compañía"><%= c.company_name || 'N/A' %></td>
+            <td data-label="Teléfono"><%= c.phone %></td>
+            <td data-label="Email"><%= c.email %></td>
+            <td data-label="Cargo"><%= c.title %></td>
+            <td data-label="LinkedIn">
               <% if (c.linkedin) { %>
                 <a href="<%= c.linkedin %>" target="_blank" class="btn btn-sm btn-outline-primary">Ver Perfil</a>
               <% } else { %>
                 <span class="text-muted">N/A</span>
               <% } %>
             </td>
+            
           </tr>
         <% }) %>
       </tbody>

@@ -212,3 +212,61 @@ input, button {
   background-color: #004ccc;
   border-color: #0042b3;
 }
+
+
+/* 
+📱 Responsive Table Design for Contacts (Mobile-first)
+
+Este bloque de CSS transforma la tabla de contactos en una vista vertical optimizada para dispositivos móviles.
+
+🧾 ¿Qué hace?
+- Oculta el <thead> para simplificar la visualización.
+- Muestra cada fila (<tr>) como una tarjeta independiente con bordes y sombra.
+- Cada <td> se convierte en una línea de dos columnas:
+  👉 A la izquierda, el nombre del campo (gracias al atributo `data-label`).
+  👉 A la derecha, el valor correspondiente.
+
+📐 ¿Por qué es útil?
+- Mejora la legibilidad y navegación en pantallas pequeñas (teléfonos).
+- Mantiene la jerarquía visual: muestra primero el Nombre y Compañía, seguidos por Teléfono, Email, Cargo y LinkedIn.
+- No afecta la visualización en pantallas grandes.
+
+💡 Importante:
+Este estilo requiere que cada <td> tenga un atributo `data-label="Nombre del campo"` para funcionar correctamente.
+*/
+/* 📱 Estilo responsivo para pantallas pequeñas (teléfonos) */
+@media (max-width: 768px) {
+  .table thead {
+    display: none; /* Oculta los encabezados */
+  }
+
+  .table tbody tr {
+    display: block;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .table tbody td::before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    color: #333;
+    flex-basis: 40%;
+    text-align: left;
+  }
+
+  .table tbody td:last-child {
+    border-bottom: none;
+  }
+}
