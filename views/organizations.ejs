@@ -1,51 +1,41 @@
 <%- include('partials/head') %> 
 <%- include('partials/header') %>
 
-<!-- 
-  🌐 organizations.ejs
-
-  📌 Vista que muestra todas las empresas registradas en el sistema CRM.
-
-  ✅ Muestra:
-    - Nombre (como link a detalles)
-    - Teléfono
-    - Website
-    - Dirección (calle + ciudad + estado)
-    - Account Manager
-
-  ✅ Responsive y limpio, con subtítulo y tabla adaptativa.
--->
-
 <div class="container mt-4">
-  <h2 class="mb-1">Companies</h2>
-  <h3 class="contact-subtitle">Organization Directory</h3>
+  <div style="background-color: #d1e7dd; padding: 1rem 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+    <h2 class="mb-1 text-dark">Companies</h2>
+<h3 class="contact-subtitle text-dark">Organization Directory</h3>
 
-  <!-- 📦 Tabla de organizaciones -->
+  </div>
+  
+
   <div class="table-responsive">
-    <table class="table table-hover shadow-sm bg-white rounded">
+    <table class="table table-hover shadow-sm bg-white rounded" style="table-layout: auto; width: 100%;">
+
       <thead class="table-light">
         <tr>
-          <th>Nombre</th>
-          <th>Teléfono</th>
+          <th>Name</th>
+          <th style="min-width: 140px; white-space: nowrap;">Phone</th>
+
           <th>Website</th>
-          <th>Dirección</th>
+          <th>Address</th>
           <th>Account Manager</th>
         </tr>
       </thead>
       <tbody>
         <% organizations.forEach(org => { %>
           <tr>
-            <!-- 🔗 Nombre como link a la vista de detalle -->
-            <td data-label="Nombre">
+            <!-- 🔗 Name -->
+            <td data-label="Name">
               <a href="/organizations/<%= org.id %>" class="text-decoration-none fw-semibold">
                 <%= org.name %>
               </a>
             </td>
 
-            <!-- ☎️ Teléfono -->
-            <td data-label="Teléfono"><%= org.phone %></td>
+            <!-- ☎️ Phone -->
+            <td data-label="Phone"><%= org.phone || 'N/A' %></td>
 
-            <!-- 🌐 Website con enlace -->
+            <!-- 🌐 Website -->
             <td data-label="Website">
               <% if (org.website) { %>
                 <a href="<%= org.website %>" target="_blank" class="text-decoration-none"><%= org.website %></a>
@@ -54,13 +44,41 @@
               <% } %>
             </td>
 
-            <!-- 🏠 Dirección -->
-            <td data-label="Dirección">
-              <%= org.billing_street %>, <%= org.billing_city %>, <%= org.billing_state_province %>
+            <!-- 🏠 Address -->
+            <td data-label="Address">
+              <%= org.billing_street || '' %><%= org.billing_street && ',' %> <%= org.billing_city || '' %>, <%= org.billing_state_province || '' %>
             </td>
 
             <!-- 👤 Account Manager -->
-            <td data-label="Account Manager"><%= org.account_manager || 'N/A' %></td>
+            <td data-label="Account Manager">
+              <form class="assign-manager-form d-flex align-items-center gap-2" data-org-id="<%= org.id %>">
+
+                <select
+
+                 name="account_manager_id"
+                  class="form-select form-select-sm border-0 fw-semibold text-center manager-select <%= org.account_manager_name ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger' %>"
+                 style="border-radius: 50rem; padding-left: 0.75rem; padding-right: 0.75rem;"
+                  onchange="handleManagerChange(this)">
+
+
+                  
+                  <option value="">Unassigned</option>
+                  <% accountManagers.forEach(m => { %>
+                    <option value="<%= m.id %>" <%= org.account_manager_id === m.id ? 'selected' : '' %>>
+                      <%= m.username %>
+                    </option>
+                  <% }) %>
+                </select>
+
+                <div class="mt-1">
+                  <button type="submit" class="btn-save-change d-none">
+                    Save
+                  </button>
+                </div>
+                
+                              
+              </form>
+            </td>
           </tr>
         <% }) %>
       </tbody>
@@ -69,3 +87,95 @@
 </div>
 
 <%- include('partials/footer') %>
+
+<!-- ✅ Script protegido -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function handleManagerChange(selectEl) {
+      const form = selectEl.closest('form');
+      const button = form.querySelector('button[type="submit"]');
+      button.classList.remove('d-none');
+    }
+
+    window.handleManagerChange = handleManagerChange;
+
+    document.querySelectorAll('.assign-manager-form').forEach(form => {
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const orgId = form.dataset.orgId;
+    const managerId = form.querySelector('select').value;
+
+    try {
+      const res = await fetch(`/organizations/${orgId}/assign-manager`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+                  },
+                  body: new URLSearchParams({ account_manager_id: managerId })
+
+      });
+
+
+
+      if (res.ok) {
+  form.querySelector('button').classList.add('d-none');
+
+  const select = form.querySelector('select');
+  const selectedValue = select.value.trim();
+
+  if (selectedValue === '' || selectedValue === null) {
+    select.setAttribute('style', `
+  background-color: #f8d7da !important;
+  color: #842029 !important;
+  border-radius: 50rem;
+  font-weight: 600;
+  text-align: center;
+`);
+
+    select.style.color = '#842029';           // texto rojo oscuro
+  } else {
+    select.setAttribute('style', `
+  background-color: #d1e7dd !important;
+  color: #0f5132 !important;
+  border-radius: 50rem;
+  font-weight: 600;
+  text-align: center;
+`);
+
+    select.style.color = '#0f5132';           // texto verde oscuro
+  }
+}
+
+      
+
+
+
+      
+    } catch (err) {
+      console.error('❌ Error en el fetch:', err);
+      alert('❌ Error al conectar con el servidor.');
+    }
+  });
+});
+
+    });
+  
+</script>
+
+<style>
+  .btn-checkmark {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1;
+    color: #6c757d;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .btn-checkmark:hover {
+    color: #343a40;
+  }
+</style>

@@ -2,85 +2,71 @@
  * app.js
  * 
  * 📌 Archivo principal de configuración de la aplicación Express.
- * 
- * Se encarga de:
- * - Inicializar el servidor Express.
- * - Configurar middleware como cookies, sesiones, logger, y Passport.
- * - Establecer el motor de vistas (EJS).
- * - Importar y usar las rutas principales del proyecto.
- * - Activar la autenticación con sesiones y Passport.js.
- * 
- * Este archivo es el punto de entrada de toda la aplicación.
  */
 
-
-
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const session = require('express-session');
 
+const app = express(); // Inicializa Express
 
-
-const searchRoute = require('./routes/searchRoute');
-const authRoute = require('./routes/authRoute');
-const indexRouter = require('./routes/index'); // ✅ antes se llamaba contactRoutes
-const usersRouter = require('./routes/users');
-const organizationRoute = require('./routes/organizationRoute');
-
-var app = express();
-
-// view engine setup
+// 🖼️ View Engine: EJS
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// 🧱 Middlewares globales
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
+// 🧠 Sesión
 app.use(session({
   secret: process.env.SESSION_SECRET || 'supersecretcrm',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // si vas a usar https, se pone true
+  cookie: { secure: false }
 }));
 
-// ✅ Hace que 'user' esté disponible automáticamente en todas las vistas EJS
+// 🌐 Middleware para exponer `user` en todas las vistas
 app.use((req, res, next) => {
   res.locals.user = req.session.user;
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+// 🧭 Importación de rutas con verificación
+function requireRoute(name, path) {
+  const route = require(path);
+  if (typeof route !== 'function') {
+    throw new TypeError(`❌ La ruta '${name}' no exporta un router válido.`);
+  }
+  return route;
+}
 
-// ✅ ORDEN CORRECTO DE LAS RUTAS
-app.use('/', indexRouter);            // ← muestra landing.ejs o index.ejs según login
-app.use('/', authRoute);              // ← login, logout
-app.use('/organizations', organizationRoute);
-app.use('/users', usersRouter);
-app.use('/search', searchRoute);
+// ✅ Rutas principales
+app.use('/', requireRoute('indexRouter', './routes/index'));
+app.use('/', requireRoute('authRoute', './routes/authRoute'));
+app.use('/users', requireRoute('userRoute', './routes/userRoute'));
+app.use('/organizations', requireRoute('organizationRoute', './routes/organizationRoute'));
+app.use('/search', requireRoute('searchRoute', './routes/searchRoute'));
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+// 🛑 404
+app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error handler
-app.use(function(err, req, res, next) {
+// ⚠️ Manejador de errores
+app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
   res.render('error');
 });
 
-
-
-
-
-
-console.log('URL de base de datos:', process.env.DATABASE_URL);
+console.log('✅ App cargada. DB URL:', process.env.DATABASE_URL);
 
 module.exports = app;

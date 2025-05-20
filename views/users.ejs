@@ -1,0 +1,31 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Users</h1>
+
+  <div class="table-wrapper">
+    <table class="table table-hover table-users">
+      <thead class="table-green">
+        <tr>
+          <th>Name</th>
+          <th>Title</th>
+          <th>Email</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td data-label="Name"><a href="/users/<%= u.id %>"><%= u.username %></a></td>
+            <td data-label="Title"><%= u.title %></td>
+            <td data-label="Email"><%= u.email %></td>
+            <td data-label="Phone"><%= u.phone %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

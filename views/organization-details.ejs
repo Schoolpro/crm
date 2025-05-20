@@ -11,6 +11,7 @@
       <span class="org-label">Phone:</span>
       <span class="org-value"><%= organization.phone || 'N/A' %></span>
     </div>
+
     <div class="org-data-row">
       <span class="org-label">Website:</span>
       <span class="org-value">
@@ -25,10 +26,33 @@
       <span class="org-label">Company Email:</span>
       <span class="org-value"><%= organization.company_email || 'N/A' %></span>
     </div>
-    <div class="org-data-row">
-      <span class="org-label">Account Manager:</span>
-      <span class="org-value"><%= organization.account_manager || 'N/A' %></span>
+    
+    <div class="org-data-row d-flex flex-column">
+      <div class="d-flex align-items-center mb-2">
+        <span class="org-label me-2">Account Manager:</span>
+        <% if (organization.account_manager_name) { %>
+          <span class="badge bg-success-subtle text-success fw-semibold px-3 py-1 rounded-pill">
+            <%= organization.account_manager_name %>
+          </span>
+        <% } else { %>
+          <span class="badge bg-danger-subtle text-danger fw-semibold px-3 py-1 rounded-pill">
+            Unassigned
+          </span>
+        <% } %>
+      </div>
+    
+      <form action="/organizations/<%= organization.id %>/assign-manager" method="POST" class="d-flex align-items-center gap-2">
+        <select name="account_manager_id" class="form-select form-select-sm w-auto" style="min-width: 200px;">
+          <% accountManagers.forEach(m => { %>
+            <option value="<%= m.id %>" <%= organization.account_manager_id === m.id ? 'selected' : '' %>>
+              <%= m.username %>
+            </option>
+          <% }) %>
+        </select>
+        <button type="submit" class="btn btn-sm btn-outline-primary">Assign</button>
+      </form>
     </div>
+
     <div class="org-data-row">
       <span class="org-label">Industry:</span>
       <span class="org-value"><%= organization.industry || 'N/A' %></span>
@@ -106,5 +130,38 @@
     </div>
   </aside>
 </div>
+
+
+<!-- 📝 Company Logs Section -->
+<section class="org-logs mt-5 px-3">
+  <h2 class="mb-3">🗒️ Relationship History</h2>
+
+  <!-- 🔘 Log submission form -->
+  <form action="/organizations/<%= organization.id %>/log" method="POST" class="mb-4">
+    <div class="mb-3">
+      <label for="logMessage" class="form-label">Add a new note or update:</label>
+      <textarea name="message" id="logMessage" rows="4" class="form-control" placeholder="Describe your recent interaction..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Post</button>
+  </form>
+
+  <!-- 📜 Existing logs -->
+  <% if (logs && logs.length > 0) { %>
+    <div class="log-list d-flex flex-column gap-3">
+      <% logs.forEach(log => { %>
+        <div class="log-entry p-3 bg-white shadow-sm rounded border">
+          <div class="d-flex justify-content-between mb-2">
+            <strong class="text-primary"><%= log.user_name %></strong>
+            <span class="text-muted small"><%= new Date(log.created_at).toLocaleString() %></span>
+          </div>
+          <div class="text-dark"><%- log.message %></div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="alert alert-secondary">No logs yet for this company.</div>
+  <% } %>
+</section>
+
 
 <%- include('partials/footer') %>
