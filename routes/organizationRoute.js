@@ -10,7 +10,7 @@
  * 
  * 🧠 Este archivo conecta la URL con el controlador correspondiente (organizationController.js)
  */
-const { requireLogin } = require('../middlewares/authmiddleware');
+const { requireLogin } = require('../middlewares/authMiddleware');
 
 
 
