@@ -44,14 +44,87 @@
     </ul>
   </div>
 
-  <!-- ✅ TAREAS -->
-  <div class="mb-5">
-    <h3>📝 Tareas asignadas</h3>
-    <ul class="list-group">
-      <li class="list-group-item">Enviar cotización a Empresa XYZ</li>
-      <li class="list-group-item">Actualizar datos de Big Motors</li>
-    </ul>
-  </div>
+  <!-- 🆕 FORMULARIO PARA CREAR NUEVA TAREA -->
+<div class="mb-5">
+  <h3>🆕 Nueva tarea</h3>
+
+  <form action="/tasks" method="POST" class="border rounded p-4 shadow-sm bg-light">
+    <div class="mb-3">
+      <label for="title" class="form-label">Título de la tarea</label>
+      <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Descripción</label>
+      <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="due_date" class="form-label">Fecha límite</label>
+      <input type="date" class="form-control" id="due_date" name="due_date">
+    </div>
+
+    <div class="mb-3">
+      <label for="assigned_to" class="form-label">Asignar a:</label>
+      <select class="form-select" id="assigned_to" name="assigned_to">
+        <option value="">-- Nadie (tarea personal) --</option>
+        <% users.forEach(user => { %>
+          <option value="<%= user.id %>"><%= user.username %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Crear tarea</button>
+  </form>
+</div>
+
+
+ <!-- ✅ TAREAS ASIGNADAS DINÁMICAS -->
+<div class="mb-5">
+  <h3>📝 Feed de tareas</h3>
+
+  <% if (tasks && tasks.length > 0) { %>
+    <div class="d-flex flex-column gap-4">
+      <% tasks.forEach(task => { %>
+        <div class="p-3 border rounded shadow-sm bg-white">
+          <h5 class="fw-bold mb-1"><%= task.title %></h5>
+          
+          <% if (task.description) { %>
+            <p class="mb-2"><%= task.description %></p>
+          <% } %>
+
+          <div class="mb-2 small text-muted">
+            Por: <%= task.created_by_name || 'Desconocido' %>
+ |
+            Fecha límite: 
+            <% if (task.due_date) { %>
+              <span class="<%= new Date(task.due_date) < new Date() ? 'text-danger fw-bold' : '' %>">
+                <%= new Date(task.due_date).toLocaleDateString() %>
+              </span>
+            <% } else { %>
+              <em>Sin fecha</em>
+            <% } %>
+          </div>
+
+          <% if (task.status === 'done') { %>
+            <div class="alert alert-success mt-2 mb-0 p-2">
+              ✅ Completada. Comentario: "<%= task.done_comment %>"
+            </div>
+            <% } else if (user && user.id === task.assigned_to) { %>
+              <!-- FORMULARIO PARA MARCAR COMO DONE -->
+            <form action="/tasks/<%= task.id %>/done" method="POST" class="mt-2 d-flex gap-2">
+              <input type="text" name="done_comment" class="form-control form-control-sm" placeholder="Comentario al completar" required>
+              <button type="submit" class="btn btn-success btn-sm">Marcar como done</button>
+            </form>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p class="text-muted">No hay tareas por el momento.</p>
+  <% } %>
+</div>
+
 
   <!-- 🎯 METAS -->
   <div class="mb-5">

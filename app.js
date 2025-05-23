@@ -53,6 +53,7 @@ app.use('/', requireRoute('authRoute', './routes/authRoute'));
 app.use('/users', requireRoute('userRoute', './routes/userRoute'));
 app.use('/organizations', requireRoute('organizationRoute', './routes/organizationRoute'));
 app.use('/search', requireRoute('searchRoute', './routes/searchRoute'));
+app.use('/tasks', requireRoute('taskRoute', './routes/taskRoute')); // ✅ MOVER AQUÍ
 
 // 🛑 404
 app.use((req, res, next) => {
