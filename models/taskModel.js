@@ -17,26 +17,43 @@
  */
 
 const pool = require('../database/db');
-
 /**
  * 🔍 getAllTasks()
  *
  * Devuelve todas las tareas del sistema, ordenadas por fecha de creación descendente.
  * Incluye los nombres de los usuarios asignados y creadores mediante LEFT JOIN con `users`.
+ * También incluye los comentarios asociados desde `task_comments`, con nombre del autor.
  */
 async function getAllTasks() {
-  const result = await pool.query(`
-    SELECT t.*, 
-           u1.username AS assigned_to_name, 
-           u2.username AS created_by_name
-    FROM tasks t
-    LEFT JOIN users u1 ON t.assigned_to = u1.id
-    LEFT JOIN users u2 ON t.created_by = u2.id
-    ORDER BY t.created_at DESC
-  `);
-  return result.rows;
-}
-
+    // 1. Traer todas las tareas con nombres de usuarios asignados y creadores
+    const result = await pool.query(`
+      SELECT t.*, 
+             u1.username AS assigned_to_name, 
+             u2.username AS created_by_name
+      FROM tasks t
+      LEFT JOIN users u1 ON t.assigned_to = u1.id
+      LEFT JOIN users u2 ON t.created_by = u2.id
+      ORDER BY t.created_at DESC
+    `);
+  
+    const tasks = result.rows;
+  
+    // 2. Para cada tarea, traer sus comentarios y agregarlos
+    for (let task of tasks) {
+      const commentResult = await pool.query(`
+        SELECT c.comment, c.created_at, u.username
+        FROM task_comments c
+        JOIN users u ON c.user_id = u.id
+        WHERE c.task_id = $1
+        ORDER BY c.created_at ASC
+      `, [task.id]);
+  
+      task.comments = commentResult.rows; // Agrega los comentarios como array a cada tarea
+    }
+  
+    return tasks;
+  }
+  
 /**
  * 🧑‍💻 getTasksAssignedTo(userId)
  *

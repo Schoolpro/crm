@@ -7,6 +7,8 @@
  * - GET /tasks → Muestra todas las tareas (feed principal).
  * - POST /tasks → Crea una nueva tarea.
  * - POST /tasks/:id/done → Marca una tarea como completada con comentario.
+ * - POST /tasks/:id/comment → Agrega un comentario a una tarea.
+ * - POST /tasks/:id/status → Cambia el estado de una tarea.
  */
 
 const express = require('express');
@@ -22,5 +24,11 @@ router.post('/', requireLogin, taskController.createTask);
 
 // ✅ Marcar una tarea como completada (con comentario)
 router.post('/:id/done', requireLogin, taskController.markTaskAsDone);
+
+// ✅ Agregar un comentario tipo Facebook a una tarea
+router.post('/:id/comment', requireLogin, taskController.addTaskComment);
+
+// ✅ Cambiar el estado de una tarea (pending, following_up, done)
+router.post('/:id/status', requireLogin, taskController.changeTaskStatus);
 
 module.exports = router;

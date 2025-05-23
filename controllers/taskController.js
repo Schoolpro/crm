@@ -12,6 +12,11 @@
 
 const taskModel = require('../models/taskModel');
 const userModel = require('../models/userModel'); // 👈 necesario para traer todos los usuarios
+const taskCommentModel = require('../models/taskCommentModel');
+
+
+
+
 
 /**
  * 🆕 createTask(req, res)
@@ -87,9 +92,49 @@ async function getAllTasksData() {
   return await taskModel.getAllTasks();
 }
 
+
+
+/**
+ * 💬 addTaskComment(req, res)
+ * Crea un nuevo comentario en una tarea.
+ */
+async function addTaskComment(req, res) {
+    const taskId = parseInt(req.params.id);
+    const userId = req.session.user?.id;
+    const { comment } = req.body;
+  
+    if (!comment || !userId) {
+      return res.status(400).send('Comentario vacío o no autorizado.');
+    }
+  
+    try {
+      await taskCommentModel.createComment({
+        task_id: taskId,
+        user_id: userId,
+        comment
+      });
+  
+      res.redirect('/');
+    } catch (err) {
+      console.error('❌ Error al crear comentario:', err);
+      res.status(500).send('Error interno al guardar comentario.');
+    }
+  }
+  
+  /**
+   * 🔍 getTaskComments(taskId)
+   * Devuelve los comentarios de una tarea específica.
+   */
+  async function getTaskComments(taskId) {
+    return await taskCommentModel.getCommentsByTaskId(taskId);
+  }
+  
+
 module.exports = {
   createTask,
   markTaskAsDone,
   getAllTasks,
-  getAllTasksData 
+  getAllTasksData,
+  addTaskComment,       // ✅ nuevo
+  getTaskComments       // ✅ nuevo
 };
