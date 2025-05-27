@@ -92,49 +92,62 @@ async function getAllTasksData() {
   return await taskModel.getAllTasks();
 }
 
-
-
 /**
  * 💬 addTaskComment(req, res)
- * Crea un nuevo comentario en una tarea.
+ * Guarda un nuevo comentario para una tarea.
  */
 async function addTaskComment(req, res) {
     const taskId = parseInt(req.params.id);
     const userId = req.session.user?.id;
     const { comment } = req.body;
   
-    if (!comment || !userId) {
-      return res.status(400).send('Comentario vacío o no autorizado.');
+    if (!comment || comment.trim() === '') {
+      return res.status(400).send('El comentario no puede estar vacío.');
     }
   
     try {
-      await taskCommentModel.createComment({
-        task_id: taskId,
-        user_id: userId,
-        comment
-      });
-  
-      res.redirect('/');
+      await taskModel.addTaskComment(taskId, userId, comment);
+      res.redirect('/'); // Redirige al feed principal
     } catch (err) {
-      console.error('❌ Error al crear comentario:', err);
-      res.status(500).send('Error interno al guardar comentario.');
+      console.error('❌ Error al agregar comentario:', err);
+      res.status(500).send('Error interno al agregar comentario.');
     }
   }
   
   /**
-   * 🔍 getTaskComments(taskId)
-   * Devuelve los comentarios de una tarea específica.
-   */
-  async function getTaskComments(taskId) {
-    return await taskCommentModel.getCommentsByTaskId(taskId);
+ * 🔄 changeTaskStatus(req, res)
+ *
+ * Cambia el estado de una tarea (pending, following_up, done).
+ * Validación básica para permitir solo valores específicos.
+ */
+async function changeTaskStatus(req, res) {
+    const taskId = parseInt(req.params.id);
+    const { status } = req.body;
+  
+    const allowedStatuses = ['pending', 'following_up', 'done'];
+  
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).send('Estado no permitido.');
+    }
+  
+    try {
+      await taskModel.changeTaskStatus(taskId, status);
+      res.redirect('/'); // Redirige al feed principal después de cambiar el estado
+    } catch (err) {
+      console.error('❌ Error al cambiar estado:', err);
+      res.status(500).send('Error interno al cambiar el estado de la tarea.');
+    }
   }
   
 
-module.exports = {
-  createTask,
-  markTaskAsDone,
-  getAllTasks,
-  getAllTasksData,
-  addTaskComment,       // ✅ nuevo
-  getTaskComments       // ✅ nuevo
-};
+
+
+  module.exports = {
+    createTask,
+    markTaskAsDone,
+    getAllTasks,
+    getAllTasksData,
+    addTaskComment,
+    changeTaskStatus    // ✅ NUEVO: ¡agregalo aquí!
+  };
+  

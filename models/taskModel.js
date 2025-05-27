@@ -109,10 +109,48 @@ async function markTaskAsDone(taskId, doneComment) {
   `, [doneComment, taskId]);
 }
 
-module.exports = {
-  getAllTasks,
-  getTasksAssignedTo,
-  getTasksCreatedBy,
-  createTask,
-  markTaskAsDone
-};
+
+/**
+ * 💬 addTaskComment(taskId, userId, comment)
+ *
+ * Guarda un nuevo comentario para una tarea específica.
+ */
+async function addTaskComment(taskId, userId, comment) {
+    await pool.query(`
+      INSERT INTO task_comments (task_id, user_id, comment)
+      VALUES ($1, $2, $3)
+    `, [taskId, userId, comment]);
+  }
+
+  /**
+ * 🔄 changeTaskStatus(taskId, newStatus)
+ *
+ * Cambia el estado (`status`) de una tarea en la base de datos.
+ * También actualiza `status_updated_at` con la fecha y hora actual.
+ *
+ * @param {number} taskId - ID de la tarea a actualizar.
+ * @param {string} newStatus - Nuevo estado (pending, following_up, done).
+ */
+async function changeTaskStatus(taskId, newStatus) {
+    await pool.query(`
+      UPDATE tasks
+      SET status = $1,
+          status_updated_at = NOW()
+      WHERE id = $2
+    `, [newStatus, taskId]);
+  }
+  
+  module.exports = {
+    getAllTasks,
+    getTasksAssignedTo,
+    getTasksCreatedBy,
+    createTask,
+    markTaskAsDone,
+    addTaskComment,       // ⚠️ asegúrate de tener esta línea
+    changeTaskStatus      // ✅ NUEVO: ¡agregala aquí!
+  };
+  
+  
+
+
+
